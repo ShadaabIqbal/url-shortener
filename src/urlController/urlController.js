@@ -17,7 +17,10 @@ try{
     let obj = {longUrl: longUrl}
     let urlCode = shortid.generate()
     obj.urlCode = urlCode
-    return res.status(201).send({status: true, message: obj})
+    let shortUrl = `${req.protocol}://${req.headers.host}/` + urlCode
+    obj.shortUrl = shortUrl
+    await urlModel.create(obj)
+    return res.status(201).send({data:obj})
 
 }catch(error){
 return res.status(500).send({status: false, message: error.message})
