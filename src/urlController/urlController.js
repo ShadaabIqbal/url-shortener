@@ -9,8 +9,8 @@ try{
     //validation for Url
     let correctLink
     await axios.get(longUrl)
-    .then(() => {correctLink === true})
-    .catch(() => {correctLink === false})
+    .then(() => {correctLink = true})
+    .catch(() => {correctLink = false})
     if(correctLink === false) return res.status(400).send({status: false, message: 'Invalid Url'})
 
 }catch(error){
