@@ -27,4 +27,17 @@ const createUrl = async function (req, res) {
     }
 }
 
-module.exports = { createUrl }
+const getUrl = async function(req, res){
+    try{
+let urlCode = req.params.urlCode
+
+let getData = await urlModel.findOne({urlCode: urlCode})
+if(!getData) return res.status(400).send({status: false, message: 'no url found'})
+return res.status(302).redirect(getData.longUrl)
+
+    }catch(error){
+        return res.status(500).send({status: false, message: error.message})
+    }
+}
+
+module.exports = { createUrl, getUrl }
