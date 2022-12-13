@@ -1,5 +1,4 @@
 const urlModel = require('../urlModel/urlModel')
-const validUrl = require('valid-url')
 const shortid = require('shortid')
 const axios = require('axios')
 
@@ -42,7 +41,6 @@ const createUrl = async function (req, res) {
 const getUrl = async function (req, res) {
     try {
         let urlCode = req.params.urlCode
-
         let getData = await urlModel.findOne({ urlCode: urlCode })
         if (!getData) return res.status(400).send({ status: false, message: 'no url found' })
         return res.status(302).redirect(getData.longUrl)
