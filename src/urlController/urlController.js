@@ -13,8 +13,8 @@ const createUrl = async function (req, res) {
         
         //validation for Url
         let presentURL = await urlModel.findOne({ longUrl: longUrl }).select({ updatedAt: 0, createdAt: 0, __v: 0 })
-        // if(presentURL) return res.status(200).send({status: true, data: presentURL})
-        if (presentURL) return res.status(400).send({ status: false, message: "Already present url" })
+        if(presentURL) return res.status(200).send({status: true, data: presentURL})
+        // if (presentURL) return res.status(400).send({ status: false, message: "Already present url" })
         let urlCode = shortid.generate().toLowerCase()
         let shortUrl = 'http://localhost:3000' + '/' + urlCode
         let obj = { longUrl: longUrl, urlCode: urlCode, shortUrl: shortUrl }
