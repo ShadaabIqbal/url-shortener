@@ -16,7 +16,7 @@ const createUrl = async function (req, res) {
         // if(presentURL) return res.status(200).send({status: true, data: presentURL})
         if (presentURL) return res.status(400).send({ status: false, message: "Already present url" })
         let urlCode = shortid.generate().toLowerCase()
-        let shortUrl = `${req.protocol}://${req.headers.host}/` + urlCode
+        let shortUrl = 'http://localhost:3000' + '/' + urlCode
         let obj = { longUrl: longUrl, urlCode: urlCode, shortUrl: shortUrl }
         let savedData = await urlModel.create(obj)
         let object = { longUrl: savedData.longUrl, urlCode: savedData.urlCode, shortUrl: savedData.shortUrl }
