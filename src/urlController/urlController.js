@@ -1,6 +1,7 @@
 const urlModel = require('../urlModel/urlModel')
 const validUrl = require('valid-url')
 const shortid = require('shortid')
+const axios = require('axios')
 
 const createUrl = async function (req, res) {
 
@@ -9,10 +10,21 @@ const createUrl = async function (req, res) {
         if (!Object.keys(req.body).includes('longUrl')) return res.status(400).send({ status: false, message: 'request body should contain only longUrl' })
         const longUrl = req.body.longUrl
         if (typeof longUrl !== 'string' || longUrl == null) return res.status(400).send({ status: false, message: 'Url is not string' })
-        if (!validUrl.isUri(longUrl)) return res.status(400).send({ status: false, message: 'Url is not valid' })
+       
+        let correctUrl = false
+        let options = {
+            method: "get",
+            url: longUrl
+        }
+        await axios(options)
+            .then(() => { correctUrl = true })
+            .catch(() => { correctUrl = false })
+        if (correctUrl == false) {
+            return res.status(400).send({ status: false, message: "url not found" })
+        }
 
         //validation for Url
-        let presentURL = await urlModel.findOne({ longUrl: longUrl }).select({ updatedAt: 0, createdAt: 0, __v: 0, _id : 0 })
+        let presentURL = await urlModel.findOne({ longUrl: longUrl }).select({ updatedAt: 0, createdAt: 0, __v: 0, _id: 0 })
         if (presentURL) return res.status(200).send({ status: true, data: presentURL })
         // if (presentURL) return res.status(400).send({ status: false, message: "Already present url" })
         let urlCode = shortid.generate().toLowerCase()
