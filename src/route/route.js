@@ -8,7 +8,7 @@ router.post('/url/shorten', urlController.createUrl)
 router.get('/:urlCode', urlController.getUrl)
 
 router.all('/*', function(res){
-    res.statusCode(400).send({status: false, message: 'Path not found'})
+    res.status(400).send({status: false, message: 'Path not found'})
 })
 
 
