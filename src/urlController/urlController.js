@@ -60,8 +60,8 @@ const getUrl = async function (req, res) {
         let urlCode = req.params.urlCode
         let cachedUrl = await GET_ASYNC(`${req.params.urlCode}`)
         if(cachedUrl) {
-            let parsedData = JSON.parse(cachedUrl.longUrl)
-         return res.status(302).redirect(parsedData)}
+            let parsedData = JSON.parse(cachedUrl)
+         return res.status(302).redirect(parsedData.longUrl)}
          else{
         let getData = await urlModel.findOne({ urlCode: urlCode })
         await SET_ASYNC(`${req.params.urlCode}`, JSON.stringify(getData))
