@@ -3,25 +3,25 @@ const shortid = require('shortid')
 const axios = require('axios')
 const redis = require('redis')
 
-const redisClient = redis.createClient(
-    13190,
-    "redis-13190.c301.ap-south-1-1.ec2.cloud.redislabs.com",
-    { no_ready_check: true }
-  );
-  redisClient.auth("gkiOIPkytPI3ADi14jHMSWkZEo2J5TDG", function (err) {
-    if (err) throw err;
-  });
+// const redisClient = redis.createClient(
+//     13190,
+//     "redis-13190.c301.ap-south-1-1.ec2.cloud.redislabs.com",
+//     { no_ready_check: true }
+//   );
+//   redisClient.auth("gkiOIPkytPI3ADi14jHMSWkZEo2J5TDG", function (err) {
+//     if (err) throw err;
+//   });
   
-  redisClient.on("connect", async function () {
-    console.log("Connected to Redis..");
-  });
+//   redisClient.on("connect", async function () {
+//     console.log("Connected to Redis..");
+//   });
   
   
   
-  //2. Prepare the functions for each command
+//   //2. Prepare the functions for each command
   
-  const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
-  const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
+//   const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
+//   const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
 const createUrl = async function (req, res) {
 
@@ -32,11 +32,11 @@ const createUrl = async function (req, res) {
         if (typeof longUrl !== 'string' || longUrl == null) return res.status(400).send({ status: false, message: 'Url is not string' })
        
         let correctUrl = false
-        await axios(longUrl)
+       await axios.get(longUrl)
             .then(() => { correctUrl = true })
             .catch(() => { correctUrl = false })
-        if (correctUrl == false) {
-            return res.status(400).send({ status: false, message: "url not found" })
+        if (correctUrl === false) {
+            return res.status(400).send({ status: false, message: "Url is not valid" })
         }
         
 
