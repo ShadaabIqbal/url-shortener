@@ -11,16 +11,13 @@ const createUrl = async function (req, res) {
         if (typeof longUrl !== 'string' || longUrl == null) return res.status(400).send({ status: false, message: 'Url is not string' })
        
         let correctUrl = false
-        let options = {
-            method: "get",
-            url: longUrl
-        }
-        await axios(options)
+        await axios(longUrl)
             .then(() => { correctUrl = true })
             .catch(() => { correctUrl = false })
         if (correctUrl == false) {
             return res.status(400).send({ status: false, message: "url not found" })
         }
+        
 
         //validation for Url
         let presentURL = await urlModel.findOne({ longUrl: longUrl }).select({ updatedAt: 0, createdAt: 0, __v: 0, _id: 0 })
@@ -28,8 +25,7 @@ const createUrl = async function (req, res) {
         // if (presentURL) return res.status(400).send({ status: false, message: "Already present url" })
         let urlCode = shortid.generate().toLowerCase()
         let shortUrl = 'http://localhost:3000' + '/' + urlCode
-        let obj = { longUrl: longUrl, urlCode: urlCode, shortUrl: shortUrl }
-        let savedData = await urlModel.create(obj)
+        let savedData = await urlModel.create( { longUrl: longUrl, urlCode: urlCode, shortUrl: shortUrl } )
         let object = { longUrl: savedData.longUrl, urlCode: savedData.urlCode, shortUrl: savedData.shortUrl }
         return res.status(201).send({ status: true, data: object })
     }
