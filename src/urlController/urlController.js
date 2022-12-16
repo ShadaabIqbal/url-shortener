@@ -71,6 +71,7 @@ const getUrl = async function (req, res) {
             return res.status(302).redirect(getData.longUrl)
         }
 
+        
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
