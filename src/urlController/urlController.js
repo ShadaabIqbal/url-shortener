@@ -61,19 +61,20 @@ const getUrl = async function (req, res) {
         let urlCode = req.params.urlCode
         let cachedUrl = await GET_ASYNC(`${req.params.urlCode}`)
         if (cachedUrl) {
-            let parsedData = JSON.parse(cachedUrl)
-            return res.status(302).redirect(parsedData.longUrl)
+            return res.status(302).redirect(cachedUrl)
         }
         else {
             let getData = await urlModel.findOne({ urlCode: urlCode })
-            await SETEX_ASYNC(`${req.params.urlCode}`, 96000, JSON.stringify(getData))
             if (!getData) return res.status(400).send({ status: false, message: 'no url found' })
-            return res.status(302).redirect(getData.longUrl)
+            let longUrl = getData.longUrl
+            await SETEX_ASYNC(`${urlCode}`, 96000, (longUrl))
+            return res.status(302).redirect(longUrl)
         }
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
 }
+
 
 module.exports = { createUrl, getUrl }
